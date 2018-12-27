@@ -1,8 +1,9 @@
 <template>
   <div class="list-view">
+    <button @click="endPolling">Stop auto mode</button>
     <task-item :task="titleTask" :index="-1"/>
     <ul class="tasks">
-      <li v-for="(task, index) in tasks" :key="index">
+      <li v-for="(task, index) in activeTasks" :key="index">
         <task-item :task="task" :index="index"/>
       </li>
     </ul>
@@ -15,8 +16,30 @@
   export default {
     name: 'TaskOverview',
     components: { TaskItem },
+    created() {
+      this.pollData();
+    },
+    beforeDestroy() {
+      this.endPolling();
+    },
+    computed: {
+      activeTasks() {
+        return this.$store.state.tasks.activeTasks;
+      },
+    },
+    methods: {
+      pollData() {
+        this.polling = setInterval(() => {
+          this.$store.dispatch('tasks/getTasks');
+        }, 10000);
+      },
+      endPolling() {
+        clearInterval(this.polling);
+      },
+    },
     data() {
       return {
+        polling: null,
         titleTask: {
           taskId: 'TaskId',
           taskDescription: 'Task Description',
@@ -26,25 +49,6 @@
           palletId: 'palletId',
           sccc: 'sccc',
         },
-        tasks: [
-          {
-            taskId: 123456789012,
-            taskDescription: 'Bring from a to b',
-            location: 'P41A08',
-            source: 'P41A08',
-            destination: 'DEC001',
-            palletId: '000124879',
-            sccc: '0123456789ABCDEFGHaa',
-          }, {
-            taskId: 2456789,
-            taskDescription: 'Bring from d to e',
-            location: 'P41A08',
-            source: 'P41A08',
-            destination: 'DEC001',
-            palletId: '123456789012',
-            sccc: '0123456789ABCDEFGHaa',
-          },
-        ],
       };
     },
   };

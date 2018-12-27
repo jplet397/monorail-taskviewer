@@ -18,19 +18,21 @@
     components: { TaskItem },
     created() {
       this.pollData();
+      this.$store.dispatch('getTasks');
     },
     beforeDestroy() {
       this.endPolling();
     },
     computed: {
       activeTasks() {
-        return this.$store.state.tasks.activeTasks;
+        console.log(`something: ${this.$store.state.activeTasks}`);
+        return this.$store.state.activeTasks;
       },
     },
     methods: {
       pollData() {
         this.polling = setInterval(() => {
-          this.$store.dispatch('tasks/getTasks');
+          this.$store.dispatch('getTasks');
         }, 10000);
       },
       endPolling() {
@@ -41,13 +43,17 @@
       return {
         polling: null,
         titleTask: {
-          taskId: 'TaskId',
-          taskDescription: 'Task Description',
-          location: 'location',
-          source: 'source',
-          destination: 'destination',
-          palletId: 'palletId',
-          sccc: 'sccc',
+          TaskId: 'TaskId',
+          TaskDescription: 'Task Description',
+          ObjectData: {
+            PalletId: 'palletId',
+            PalletLabel: 'sccc',
+          },
+          ExecutionData: {
+            CurrentLocation: { LocId: 'location' },
+            SourceLoc: { LocId: 'source' },
+            DestinationLoc: { LocId: 'destination' },
+          },
         },
       };
     },

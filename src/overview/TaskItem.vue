@@ -1,19 +1,24 @@
 <template>
   <div class="container">
     <span class="standard badge">{{index + 1}}</span>
-    <span class="standard normal task-id">{{task.taskId}}</span>
-    <span class="standard normal pallet-id">{{task.palletId}}</span>
-    <span class="standard normal sccc">{{task.sccc}}</span>
-    <span class="standard normal location">{{task.location}}</span>
-    <span class="standard normal location">{{task.source}}</span>
-    <span class="standard normal location">{{task.destination}}</span>
-    <span class="standard normal">{{task.taskDescription}}</span>
+    <span class="standard normal task-id">{{task.TaskId}}</span>
+    <span class="standard normal pallet-id">{{task.ExecutionStatus}}</span>
+    <span class="standard normal pallet-id">{{task.TaskStatus}}</span>
+    <span class="standard normal pallet-id">{{task.ObjectData.PalletId}}</span>
+    <span class="standard normal sccc">{{task.ObjectData.PalletLabel}}</span>
+    <span class="standard normal location">{{task.ExecutionData.CurrentLocation.LocId}}</span>
+    <span class="standard normal location">{{task.ExecutionData.SourceLoc.LocId}}</span>
+    <span class="standard normal location">{{task.ExecutionData.DestinationLoc.LocId}}</span>
+    <span class="standard normal">{{task.TaskDesc}}</span>
   </div>
 </template>
 
 <script>
   export default {
     name: 'TaskItem',
+    created() {
+      console.log(this.task);
+    },
     props: {
       index: {
         type: Number,

@@ -15,7 +15,7 @@ export default {
   },
   actions: {
     getTasks({ commit }) {
-      axios.get('/api/parts')
+      axios.get('http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetActiveTasks();')
         .then(result => commit('updateTasks', result.data.results))
         .catch(console.error);
     },

@@ -1,6 +1,7 @@
 <template>
   <div class="list-view">
-    <button @click="endPolling">Stop auto mode</button>
+    <button v-if="!isPolling" @click="pollData">Start auto mode</button>
+    <button v-if="isPolling" @click="endPolling">Stop auto mode</button>
     <task-item :task="titleTask" :index="-1"/>
     <ul class="tasks">
       <li v-for="(task, index) in activeTasks" :key="index">
@@ -25,26 +26,31 @@
     },
     computed: {
       activeTasks() {
-        console.log(`something: ${this.$store.state.activeTasks}`);
         return this.$store.state.activeTasks;
       },
     },
     methods: {
       pollData() {
+        this.isPolling = true;
         this.polling = setInterval(() => {
           this.$store.dispatch('getTasks');
         }, 10000);
       },
       endPolling() {
         clearInterval(this.polling);
+        this.isPolling = false;
       },
     },
     data() {
       return {
+        isPolling: false,
         polling: null,
         titleTask: {
           TaskId: 'TaskId',
           TaskDescription: 'Task Description',
+          ExecutionStatus: 'execution status',
+          TaskStatus: 'task status',
+          TaskDesc: 'description',
           ObjectData: {
             PalletId: 'palletId',
             PalletLabel: 'sccc',

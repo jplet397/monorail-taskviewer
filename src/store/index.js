@@ -54,9 +54,19 @@ export default new Vuex.Store({
         }
       });
 
-      const urlBase = 'http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.PushActiveTask(';
+      const urlBase = 'http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.PushNewTask(';
       const urlEnd = ');';
       const url = urlBase.concat(urlParameters, urlEnd);
+
+      console.log(url);
+      axios.get(url)
+        .then(console.log('working'))
+        .catch(console.error);
+    },
+    cancelTask(config, taskId) {
+      const urlBase = 'http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.CancelTask(';
+      const urlEnd = ');';
+      const url = urlBase.concat(taskId, urlEnd);
 
       console.log(url);
       axios.get(url)

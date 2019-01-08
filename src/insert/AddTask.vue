@@ -6,7 +6,7 @@
     <br>
 
     <div class="form">
-    <form id="form" @submit.prevent="pushNewTask">
+    <form id="form" @submit.prevent="pushTask">
       <label>Pallet ID:
         <span class="required">*</span>
         <input type="text" name="palletId" v-model="payload.pallet">
@@ -104,6 +104,11 @@
       pushNewTask() {
         console.log('payload:', this.payload);
         this.$store.dispatch('pushTask', this.payload);
+      },
+      pushTask() {
+        this.pushNewTask()
+          .then(() => this.$toasted.show(`Task for pallet id ${this.payload.pallet} created successfully`))
+          .then(() => this.$router.push('/'));
       },
     },
   };

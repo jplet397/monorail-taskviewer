@@ -4,10 +4,10 @@
     <button v-if="isPolling" @click="endPolling">Stop auto mode</button>
     <task-item :task="titleTask" :index="-1"/>
     <ul class="tasks">
-    <li v-for="(task, index) in activeTasks" :key="index">
-      <task-item :task="task" :index="index"/>
-    </li>
-  </ul>
+      <li v-for="(task, index) in activeTasks" :key="index">
+        <task-item :task="task" :index="index"/>
+      </li>
+    </ul>
   </div>
 </template>
 

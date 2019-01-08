@@ -34,7 +34,7 @@
         this.$store.dispatch('cancelTask', this.task.TaskId);
       },
       updateTask() {
-        // this.$store.dispatch('cancelTask', this.task.TaskId);
+        this.$router.push(`/update/${this.task.TaskId}`);
       },
     },
     props: {

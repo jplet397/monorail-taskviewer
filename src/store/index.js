@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import axios from 'axios';
+import constants from '../constants';
 
 Vue.use(Vuex);
 
@@ -24,17 +25,17 @@ export default new Vuex.Store({
   },
   actions: {
     getTasks({ commit }) {
-      axios.get('http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetActiveTasks();')
+      axios.get(`http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetActiveTasks();`)
         .then(result => commit('updateTasks', result.data.Result))
         .catch(console.error);
     },
     getExecutionStates({ commit }) {
-      axios.get('http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetExecutionStates();')
+      axios.get(`http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetExecutionStates();`)
         .then(result => commit('updateExecutionStates', result.data.Result))
         .catch(this.$toasted.show('Something went wrong'));
     },
     getTaskStates({ commit }) {
-      axios.get('http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetTaskStates();')
+      axios.get(`http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetTaskStates();`)
         .then(result => commit('updateTaskStates', result.data.Result))
         .catch(this.$toasted.show('Something went wrong'));
     },
@@ -54,7 +55,32 @@ export default new Vuex.Store({
         }
       });
 
-      const urlBase = 'http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.PushNewTask(';
+      const urlBase = `http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.PushNewTask(`;
+      const urlEnd = ');';
+      const url = urlBase.concat(urlParameters, urlEnd);
+
+      console.log(url);
+      axios.get(url)
+        .then(console.log('working'))
+        .catch(console.error);
+    },
+    updateTask(config, parameters) {
+      console.log(parameters);
+
+      let urlParameters = '';
+      Object.entries(parameters).forEach((key, index) => {
+        let parameter = key[1];
+        if (parameter === '') {
+          parameter = '\xa0';
+        }
+
+        urlParameters += parameter;
+        if (index !== Object.keys(parameters).length - 1) {
+          urlParameters += ', ';
+        }
+      });
+
+      const urlBase = `http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.UpdateTask(`;
       const urlEnd = ');';
       const url = urlBase.concat(urlParameters, urlEnd);
 
@@ -64,7 +90,7 @@ export default new Vuex.Store({
         .catch(console.error);
     },
     cancelTask(config, taskId) {
-      const urlBase = 'http://127.0.0.1:5000/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.CancelTask(';
+      const urlBase = `http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.CancelTask(`;
       const urlEnd = ');';
       const url = urlBase.concat(taskId, urlEnd);
 

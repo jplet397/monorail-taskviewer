@@ -65,6 +65,7 @@
   export default {
     name: 'AddTask',
     created() {
+      this.getPayLoad();
       this.$store.dispatch('getTaskStates');
     },
     mounted() {
@@ -74,20 +75,20 @@
       id: {
         type: [Number, String],
         validator(value) {
-          return Number.isInteger(Number(value));
+          // return Number.isInteger(Number(value));
         },
       },
     },
     data() {
       return {
         payload: {
-          task: this.getTask.TaskId,
-          trolley: this.getTask.ObjectData.TrolleyId,
-          location: this.getTask.ExecutionData.CurrentLocation.LocId,
-          source: this.getTask.ExecutionData.SourceLoc.LocId,
-          destination: this.getTask.ExecutionData.DestinationLoc.LocId,
-          taskStatus: this.getTask.TaskStatus,
-          executionStatus: this.getTask.ExecutionStatus,
+          task: '',
+          trolley: '',
+          location: '',
+          source: '',
+          destination: '',
+          taskStatus: '',
+          executionStatus: '',
         },
       };
     },
@@ -106,20 +107,28 @@
       getTaskStates() {
         return this.$store.state.taskStates;
       },
-      getTask() {
-        const tasks = this.$store.state.taskStates;
-        return tasks.find(x => x.id === this.taskId);
-      },
     },
     methods: {
       updateTheTask() {
         console.log('payload:', this.payload);
-        this.$store.dispatch('pushTask', this.payload);
+        this.$store.dispatch('updateTask', this.payload);
       },
       updateTask() {
         this.updateTheTask()
-          .then(() => this.$toasted.show(`Task for pallet id ${this.payload.pallet} created successfully`))
+          .then(() => this.$toasted.show(`Task ${this.payload.task} updated successfully`))
           .then(() => this.$router.push('/'));
+      },
+      getPayLoad() {
+        const tasks = this.$store.state.activeTasks;
+        const task = tasks.find(x => x.id === this.taskId);
+        console.log('Task', task);
+        this.payload.task = task.TaskId;
+        this.payload.trolley = task.ExecutionData.TrolleyId;
+        this.payload.location = task.ExecutionData.CurrentLocation.LocId;
+        this.payload.source = task.ExecutionData.SourceLoc.LocId;
+        this.payload.destination = task.ExecutionData.DestinationLoc.LocId;
+        this.payload.taskStatus = task.TaskStatus;
+        this.payload.executionStatus = task.ExecutionStatus;
       },
     },
   };

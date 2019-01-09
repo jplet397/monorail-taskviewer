@@ -15,7 +15,7 @@ export default new Router({
     },
     {
       path: '/insert',
-      name: 'Insert',
+      name: 'insert',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -23,13 +23,9 @@ export default new Router({
     },
     {
       path: '/update/:taskId/',
-      name: 'Update',
+      name: 'update',
       component: UpdateTask,
       props: true,
-      beforeEnter(to, from, next) {
-        const isValidId = Number.isInteger(Number(to.params.id));
-        next(isValidId);
-      },
     },
   ],
 });

@@ -107,8 +107,14 @@
       },
       pushTask() {
         this.pushNewTask()
-          .then(() => this.$toasted.show(`Task for pallet id ${this.payload.pallet} created successfully`))
-          .then(() => this.$router.push('/'));
+          .then(() => {
+            this.$toasted.show(`Task for pallet id ${this.payload.pallet} created successfully`);
+            this.$router.push('/');
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$toasted.show(`Failed to Push Task ${this.payload.pallet}`);
+          });
       },
     },
   };

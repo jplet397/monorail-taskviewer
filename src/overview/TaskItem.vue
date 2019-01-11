@@ -17,7 +17,8 @@
         <div class="information">
           <button @click="updateTask">Update</button>
           <button @click="cancelTask">Cancel</button>
-        </div>
+          <button @click="clearFailed">Clear Failed Drops</button>
+      </div>
       </div>
     </div>
   </div>
@@ -32,6 +33,9 @@
     methods: {
       cancelTask() {
         this.$store.dispatch('cancelTask', this.task.TaskId);
+      },
+      clearFailed() {
+        this.$store.dispatch('clearFailed', this.task.TaskId);
       },
       updateTask() {
         this.$router.push(`/update/${this.task.TaskId}`);
@@ -126,6 +130,6 @@
   }
 
   .location {
-    width: 4em;
+    width: 6em;
   }
 </style>

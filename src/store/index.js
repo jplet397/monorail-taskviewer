@@ -25,23 +25,23 @@ export default new Vuex.Store({
   },
   actions: {
     getTasks({ commit }) {
-      axios.get(`http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetActiveTasks();`)
+      const url = `${constants.DEFAULT_URL}.GetActiveTasks();`;
+      console.log(url);
+      axios.get(url)
         .then(result => commit('updateTasks', result.data.Result))
         .catch(console.error);
     },
     getExecutionStates({ commit }) {
-      axios.get(`http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetExecutionStates();`)
+      axios.get(`${constants.DEFAULT_URL}.GetExecutionStates();`)
         .then(result => commit('updateExecutionStates', result.data.Result))
         .catch(this.$toasted.show('Something went wrong'));
     },
     getTaskStates({ commit }) {
-      axios.get(`http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.GetTaskStates();`)
+      axios.get(`${constants.DEFAULT_URL}.GetTaskStates();`)
         .then(result => commit('updateTaskStates', result.data.Result))
         .catch(this.$toasted.show('Something went wrong'));
     },
     pushTask(config, parameters) {
-      console.log(parameters);
-
       let urlParameters = '';
       Object.entries(parameters).forEach((key, index) => {
         let parameter = key[1];
@@ -55,7 +55,7 @@ export default new Vuex.Store({
         }
       });
 
-      const urlBase = `http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.PushNewTask(`;
+      const urlBase = `${constants.DEFAULT_URL}.PushNewTask(`;
       const urlEnd = ');';
       const url = urlBase.concat(urlParameters, urlEnd);
 
@@ -65,8 +65,6 @@ export default new Vuex.Store({
         .catch(console.error);
     },
     updateTask(config, parameters) {
-      console.log(parameters);
-
       let urlParameters = '';
       Object.entries(parameters).forEach((key, index) => {
         let parameter = key[1];
@@ -80,7 +78,7 @@ export default new Vuex.Store({
         }
       });
 
-      const urlBase = `http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.UpdateTask(`;
+      const urlBase = `${constants.DEFAULT_URL}.UpdateTask(`;
       const urlEnd = ');';
       const url = urlBase.concat(urlParameters, urlEnd);
 
@@ -90,7 +88,16 @@ export default new Vuex.Store({
         .catch(console.error);
     },
     cancelTask(config, taskId) {
-      const urlBase = `http://${constants.SERVER}:${constants.PORT}/invoke?cmd=Intrion.Service.MonorailControl.TaskRestService.CancelTask(`;
+      const urlBase = `${constants.DEFAULT_URL}.CancelTask(`;
+      const urlEnd = ');';
+      const url = urlBase.concat(taskId, urlEnd);
+
+      axios.get(url)
+        .then(console.log('working'))
+        .catch(console.error);
+    },
+    clearFailed(config, taskId) {
+      const urlBase = `${constants.DEFAULT_URL}.ClearFailed(`;
       const urlEnd = ');';
       const url = urlBase.concat(taskId, urlEnd);
 

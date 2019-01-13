@@ -27,12 +27,17 @@
 <script>
   export default {
     name: 'TaskItem',
-    created() {
-      console.log(this.task);
-    },
     methods: {
       cancelTask() {
-        this.$store.dispatch('cancelTask', this.task.TaskId);
+        this.$store.dispatch('cancelTask', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`);
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
       },
       clearFailed() {
         this.$store.dispatch('clearFailed', this.task.TaskId);

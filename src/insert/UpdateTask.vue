@@ -3,7 +3,6 @@
     <div>Make sure to only send valid data</div>
     <div>Do not use spaces</div>
     <br>
-
     <div class="form">
       <form id="form" @submit.prevent="updateTask">
         <label>Task ID:
@@ -65,17 +64,17 @@
   export default {
     name: 'AddTask',
     created() {
-      this.getPayLoad();
       this.$store.dispatch('getTaskStates');
     },
     mounted() {
-      this.$store.dispatch('getExecutionStates');
+      this.$store.dispatch('getExecutionStates')
+        .then(() => this.getPayLoad());
     },
     props: {
       id: {
         type: [Number, String],
         validator(value) {
-          // return Number.isInteger(Number(value));
+          return Number.isInteger(Number(value));
         },
       },
     },
@@ -109,26 +108,31 @@
       },
     },
     methods: {
-      updateTheTask() {
-        console.log('payload:', this.payload);
-        this.$store.dispatch('updateTask', this.payload);
-      },
       updateTask() {
-        this.updateTheTask()
-          .then(() => this.$toasted.show(`Task ${this.payload.task} updated successfully`))
-          .then(() => this.$router.push('/'));
+        this.$store.dispatch('updateTask', this.payload)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Task ${this.payload.task} updated successfully`);
+              this.$router.push('/');
+            } else {
+              this.$toasted.show(`Failed to update Task ${this.payload.task}, Msg: ${result}`);
+            }
+          });
       },
       getPayLoad() {
-        const tasks = this.$store.state.activeTasks;
-        const task = tasks.find(x => x.id === this.taskId);
-        console.log('Task', task);
-        this.payload.task = task.TaskId;
-        this.payload.trolley = task.ExecutionData.TrolleyId;
-        this.payload.location = task.ExecutionData.CurrentLocation.LocId;
-        this.payload.source = task.ExecutionData.SourceLoc.LocId;
-        this.payload.destination = task.ExecutionData.DestinationLoc.LocId;
-        this.payload.taskStatus = task.TaskStatus;
-        this.payload.executionStatus = task.ExecutionStatus;
+        const anId = this.$route.params.taskId;
+        this.$store.dispatch('getTasksById', anId)
+          .then((task) => {
+            if (task !== false) {
+              this.payload.task = task.TaskId;
+              this.payload.trolley = task.ExecutionData.TrolleyId;
+              this.payload.location = task.ExecutionData.CurrentLocation.LocId;
+              this.payload.source = task.ExecutionData.SourceLoc.LocId;
+              this.payload.destination = task.ExecutionData.DestinationLoc.LocId;
+              this.payload.taskStatus = task.TaskStatus;
+              this.payload.executionStatus = task.ExecutionStatus;
+            }
+          });
       },
     },
   };

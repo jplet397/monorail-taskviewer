@@ -50,11 +50,7 @@
     name: 'TaskOverview',
     components: { CollapsibleSection, TaskItem },
     created() {
-      this.pollData();
       this.$store.dispatch('getTasks')
-        .then(() => {
-          this.$toasted.show('Successfully Received Tasks');
-        })
         .catch((err) => {
           console.log(err);
           this.$toasted.show('Failed to get Tasks');

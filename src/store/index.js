@@ -24,22 +24,46 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    getTasks({ commit }) {
+    getTasks({commit}) {
       const url = `${constants.DEFAULT_URL}.GetActiveTasks();`;
       console.log(url);
       axios.get(url)
-        .then(result => commit('updateTasks', result.data.Result))
+        .then((result) => {
+          if (result.data.MethodeSucceed === true) {
+            commit('updateTasks', result.data.Result);
+          } else {
+            console.log('Getting tasks failed', result.data);
+          }
+        })
         .catch(console.error);
     },
-    getExecutionStates({ commit }) {
-      axios.get(`${constants.DEFAULT_URL}.GetExecutionStates();`)
-        .then(result => commit('updateExecutionStates', result.data.Result))
-        .catch(this.$toasted.show('Something went wrong'));
+    getTasksById(config, parameter) {
+      console.log('task id:', parameter);
+      const url = `${constants.DEFAULT_URL}.GetTaskById(${parameter});`;
+      console.log(url);
+      return axios.get(url)
+        .then((result) => {
+          if (result.data.MethodeSucceed === true) {
+            return result.data.Result;
+          }
+          console.log('Getting task failed', result.data);
+          return false;
+        })
+        .catch(console.error);
     },
-    getTaskStates({ commit }) {
-      axios.get(`${constants.DEFAULT_URL}.GetTaskStates();`)
+    getExecutionStates({commit}) {
+      const url = `${constants.DEFAULT_URL}.GetExecutionStates();`;
+      console.log(url);
+      axios.get(url)
+        .then(result => commit('updateExecutionStates', result.data.Result))
+        .catch(console.error);
+    },
+    getTaskStates({commit}) {
+      const url = `${constants.DEFAULT_URL}.GetTaskStates();`;
+      console.log(url);
+      axios.get(url)
         .then(result => commit('updateTaskStates', result.data.Result))
-        .catch(this.$toasted.show('Something went wrong'));
+        .catch(console.error);
     },
     pushTask(config, parameters) {
       let urlParameters = '';
@@ -60,9 +84,17 @@ export default new Vuex.Store({
       const url = urlBase.concat(urlParameters, urlEnd);
 
       console.log(url);
-      axios.get(url)
-        .then(console.log('working'))
-        .catch(console.error);
+      return axios.get(url)
+        .then((result) => {
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
     },
     updateTask(config, parameters) {
       let urlParameters = '';
@@ -83,18 +115,35 @@ export default new Vuex.Store({
       const url = urlBase.concat(urlParameters, urlEnd);
 
       console.log(url);
-      axios.get(url)
-        .then(console.log('working'))
-        .catch(console.error);
+      return axios.get(url)
+        .then((result) => {
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
     },
     cancelTask(config, taskId) {
       const urlBase = `${constants.DEFAULT_URL}.CancelTask(`;
       const urlEnd = ');';
       const url = urlBase.concat(taskId, urlEnd);
 
-      axios.get(url)
-        .then(console.log('working'))
-        .catch(console.error);
+      return axios.get(url)
+        .then((result) => {
+          console.log(result);
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
     },
     clearFailed(config, taskId) {
       const urlBase = `${constants.DEFAULT_URL}.ClearFailed(`;

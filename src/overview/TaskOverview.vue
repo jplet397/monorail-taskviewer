@@ -26,7 +26,7 @@
         <!--</div>-->
       <!--</li>-->
     <!--</ul>-->
-    <div class="grid-container">
+    <div class="grid-container" v-if="false">
       <div class="overview">
       <table class="datagrid">
         <thead>

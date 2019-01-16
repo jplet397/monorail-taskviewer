@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="title-bar" @click="open = !open">
+      <div class="title-bar" @click="collapseDetail">
         <span class="standard badge">{{index + 1}}</span>
         <span class="standard normal task-id">{{task.TaskId}}</span>
         <span class="standard normal execution">{{task.ExecutionStatus}}</span>
@@ -40,10 +40,22 @@
           });
       },
       clearFailed() {
-        this.$store.dispatch('clearFailed', this.task.TaskId);
+        this.$store.dispatch('clearFailed', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Failed drops for task ${this.task.TaskId} cleared`);
+            } else {
+              this.$toasted.show(`Failed to clear failed drops for task ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
       },
       updateTask() {
         this.$router.push(`/update/${this.task.TaskId}`);
+      },
+      collapseDetail() {
+        if (this.index + 1 !== 0) {
+          this.open = !this.open;
+        }
       },
     },
     props: {

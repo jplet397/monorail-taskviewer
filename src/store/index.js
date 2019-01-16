@@ -151,9 +151,18 @@ export default new Vuex.Store({
       const url = urlBase.concat(taskId, urlEnd);
 
       console.log(url);
-      axios.get(url)
-        .then(console.log('working'))
-        .catch(console.error);
+      return axios.get(url)
+        .then((result) => {
+          console.log(result);
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
     },
   },
 });

@@ -7,7 +7,7 @@
       <form id="form" @submit.prevent="updateTask">
         <label>Task ID:
           <span class="required">*</span>
-          <input type="text" name="taskId" readonly v-model="payload.task">
+          <input type="text" name="taskId" disabled="disabled" readonly v-model="payload.task">
         </label>
         <br>
         <label>Trolley ID:

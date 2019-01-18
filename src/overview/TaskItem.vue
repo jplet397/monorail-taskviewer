@@ -149,4 +149,18 @@
   .location {
     width: 6em;
   }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 14px;
+    margin: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 </style>

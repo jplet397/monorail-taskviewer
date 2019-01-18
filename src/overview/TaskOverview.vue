@@ -10,7 +10,6 @@
         <task-item :task="task" :index="index"/>
       </li>
     </ul>
-
     <!--<ul class="tasks">-->
       <!--<li v-for="(task, index) in activeTasks" :key="index">-->
         <!--<div class="container">-->
@@ -26,7 +25,7 @@
         <!--</div>-->
       <!--</li>-->
     <!--</ul>-->
-    <div class="grid-container" v-if="false">
+    <div class="grid-container" v-if="true">
       <div class="overview">
       <table class="datagrid">
         <thead>
@@ -45,7 +44,7 @@
         <tr v-for="(task, index) in activeTasks"
             :key="index"
             class="standard-row"
-            v-bind:class="{selected: isSelected}">
+            v-bind:class="{selected: isSelected,'chosen_row': selectedTask === task}">
           <td class="badge">{{index + 1}}</td>
           <td class="normal">{{task.TaskId}}</td>
           <td class="normal">{{task.ObjectData.PalletId}}</td>
@@ -58,8 +57,8 @@
         </tbody>
       </table>
       </div>
-      <div class="detail" style="">
-        <task-detail></task-detail>
+      <div class="detail" v-if="selectedTask !== null">
+        <task-detail id="selectedTask.TaskId"></task-detail>
       </div>
     </div>
   </div>
@@ -103,7 +102,9 @@
     },
     data() {
       return {
+        isSelected: false,
         isPolling: false,
+        selectedTask: null,
         polling: null,
         titleTask: {
           TaskId: 'TaskId',
@@ -127,6 +128,10 @@
 </script>
 
 <style scoped>
+  .listview {
+    height: 100%;
+  }
+
   .buttons {
     background: none;
     margin-right: 2em;
@@ -149,7 +154,6 @@
   }
 
   button {
-
     color: white;
     padding: 12px 20px;
     border: none;

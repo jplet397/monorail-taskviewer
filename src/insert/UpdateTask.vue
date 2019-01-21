@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <div>Make sure to only send valid data</div>
-    <div>Do not use spaces</div>
     <br>
     <div class="form">
       <form id="form" @submit.prevent="updateTask">
@@ -55,6 +53,7 @@
         </label>
         <br><br>
         <input type="submit" value="Submit">
+        <a class="cancel-button" @click="cancel">Cancel</a>
       </form>
     </div>
   </div>
@@ -108,6 +107,9 @@
       },
     },
     methods: {
+      cancel() {
+        this.$router.push('/');
+      },
       updateTask() {
         this.$store.dispatch('updateTask', this.payload)
           .then((result) => {
@@ -158,7 +160,7 @@
   }
 
   input[type=submit] {
-    background-color: #4CAF50;
+    background-color: #FF000F;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -168,19 +170,38 @@
   }
 
   input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: #e6000f;
+  }
+
+  .cancel-button {
+    background-color: #6E6E6E;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+    margin-right: 16px;
+  }
+
+  .cancel-button:hover {
+    background-color: #666666;
   }
 
   .form {
     width: 600px;
     display: inline-block;
     border-radius: 5px;
-    background-color: #f2f2f2;
+    background-color: #DCDCDC;
     padding: 20px;
   }
 
   .required{
     color:red;
     font-weight:normal;
+  }
+
+  .container {
+    padding-top: 80px;
   }
 </style>

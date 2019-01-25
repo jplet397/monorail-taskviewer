@@ -85,14 +85,14 @@
             <div >
               <ul class="tasks">
                 <li v-for="(failed, index) in task.ExecutionData.FailedDropLocations" :key="index">
-                  <label>{{failed.LocId}}</label>
+                  <label>{{failed}}</label>
                 </li>
               </ul>
             </div>
-          </div>
           <button @click="updateTask">Update</button>
           <button @click="cancelTask">Cancel</button>
           <button @click="clearFailed">Clear Failed Drops</button>
+      </div>
       </div>
     </div>
 </template>
@@ -186,19 +186,19 @@
 </script>
 
 <style scoped>
-  badge-error {
+  .badge-error {
     background-color: #FF000F;;
   }
 
-  badge-warning {
+  .badge-warning {
     background-color: #ff7c10;
   }
 
-  badge-normal{
+  .badge-normal{
     background-color: #34ff47;
   }
 
-  badge-waiting{
+  .badge-waiting{
     background-color: #4a54ff;
   }
 
@@ -272,24 +272,6 @@
     width: 98%;
     margin: .5em;
     border-radius: 4px;
-  }
-
-  .standard {
-    font-size: small;
-    line-height: 1em;
-    padding: 0.8em 0.7em 0 0.7em;
-    position: relative;
-    left: -1px;
-    top: -4px;
-    height: 1.8em;
-    margin-right: .8em;
-    border-radius: 4px 0 0 4px;
-    text-align: center;
-  }
-
-  .normal {
-    color: mediumpurple;
-    background-color: #EEE;
   }
 
   button:hover {

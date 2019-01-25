@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import TaskOverview from './overview/TaskOverview.vue';
 import UpdateTask from './insert/UpdateTask.vue';
+import MatrixOverview from './matrix/MatrixOverview.vue';
 
 Vue.use(Router);
 
@@ -26,6 +27,11 @@ export default new Router({
       name: 'update',
       component: UpdateTask,
       props: true,
+    },
+    {
+      path: '/matrix',
+      name: 'matrixOverview',
+      component: MatrixOverview,
     },
   ],
 });

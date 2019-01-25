@@ -11,6 +11,8 @@
         <router-link style="margin-left: 16px" to="/">Overview</router-link>
         |
         <router-link to="/insert">Add New</router-link>
+        |
+        <router-link to="/matrix">Matrix Test</router-link>
       </div>
     </div>
     <div id="body">
@@ -29,7 +31,7 @@
   }
 
   .header {
-    width: 62%;
+    width: 80%;
     height: 64px;
     /*background-color: #F0F0F0;*/
     background-color: White;
@@ -62,7 +64,7 @@
 
   .nav-bar {
     height: 32px;
-    width: 62%;
+    width: 80%;
     background-color: #6E6E6E;
     border-radius: 1em;
     margin: auto;
@@ -84,7 +86,7 @@
   }
 
   #body {
-    width: 62%;
+    width: 80%;
     /*background-color: #F0F0F0;*/
     background-color: White;
     margin: auto;

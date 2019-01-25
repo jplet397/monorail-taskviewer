@@ -74,6 +74,9 @@
     created() {
       this.colorCode();
     },
+    beforeUpdate() {
+      this.colorCode();
+    },
     computed: {
       formatCreateDate() {
         function pad(s) { return (s < 10) ? `0${s}` : s; }
@@ -185,7 +188,7 @@
   }
 
   .information {
-    background: lightsteelblue;
+    background-color: #DCDCDC;
   }
 
   .area-container {
@@ -224,7 +227,8 @@
     left: 0;
     right: 0;
     width: 100%;
-    background-color: #DCDCDC;
+    /*background-color: #DCDCDC;*/
+    background-color: #F0F0F0;
     height: 5em;
     border-radius: 4px;
     border-color: #6E6E6E;
@@ -233,7 +237,7 @@
   }
 
   .container {
-    background-color: lightsteelblue;
+    background-color: #DCDCDC;
     left: 0;
     right: 0;
     width: 98%;

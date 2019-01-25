@@ -8,7 +8,8 @@
     </div>
     <div class="nav-bar">
       <div id="nav">
-        <router-link style="margin-left: 16px" to="/">Overview</router-link> |
+        <router-link style="margin-left: 16px" to="/">Overview</router-link>
+        |
         <router-link to="/insert">Add New</router-link>
       </div>
     </div>
@@ -30,18 +31,19 @@
   .header {
     width: 62%;
     height: 64px;
-    background-color: #F0F0F0;
+    /*background-color: #F0F0F0;*/
+    background-color: White;
     margin: auto;
     display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: flex-start;
+    align-items:center;
   }
 
   .logo {
     width: 88px;
     height: 40px;
-    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
   }
 
   .abb-logo {
@@ -62,17 +64,18 @@
     height: 32px;
     width: 62%;
     background-color: #6E6E6E;
+    border-radius: 1em;
     margin: auto;
     color: white;
     display: flex;
     flex-wrap: wrap;
     align-content: center;
     justify-content: flex-start;
+    align-items:center;
   }
 
   #nav a {
     font-weight: bold;
-    /*color: #2c3e50;*/
     color: white;
   }
 
@@ -82,7 +85,8 @@
 
   #body {
     width: 62%;
-    background-color: #F0F0F0;
+    /*background-color: #F0F0F0;*/
+    background-color: White;
     margin: auto;
     padding-bottom: 160px;
   }

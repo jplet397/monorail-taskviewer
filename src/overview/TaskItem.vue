@@ -3,7 +3,6 @@
     <div class="container">
       <div class="title-bar" @click="collapseDetail">
         <div  class="badge" v-bind:style="{ background: badgeColor }">
-          <!--<div>{{index + 1}}</div>-->
           <div>{{task.ExecutionData.TrolleyId}}</div>
         </div>
         <div class="area-container" v-if="true">
@@ -58,14 +57,44 @@
       </div>
       <div v-if="open">
         <div class="information">
-          <span class="standard normal">{{task.TaskDesc}}</span>
+            <label>Type:</label> <span>{{task.TaskType}}</span><br>
+            <label>Priority:</label> <span>{{task.TaskPriority}}</span><br>
+            <label>Description:</label> <span>{{task.TaskDesc}}</span><br>
+          </div><br>
+          <div class="object-data">
+            <label>Pallet Type:</label> <span>{{task.ObjectData.PalletType}}</span><br>
+          </div><br>
+            <div class="location">
+              <label>LocID:</label> <span>{{task.ExecutionData.CurrentLocation.LocId}}</span><br>
+              LocID Monorail:<span>{{task.ExecutionData.CurrentLocation.LocidMonorail}}</span><br>
+              Sequence: <span>{{task.ExecutionData.CurrentLocation.MonorailSequence}}</span><br>
+              <label>PlcID:</label> <span>{{task.ExecutionData.CurrentLocation.Plcid}}</span><br>
+            </div><br>
+            <div class="source">
+              <label>LocID:</label> <span>{{task.ExecutionData.SourceLoc.LocId}}</span><br>
+              LocID Monorail: <span>{{task.ExecutionData.SourceLoc.LocidMonorail}}</span><br>
+             Sequence: <span>{{task.ExecutionData.SourceLoc.MonorailSequence}}</span><br>
+              <label>PlcID:</label> <span>{{task.ExecutionData.SourceLoc.Plcid}}</span><br>
+            </div><br>
+            <div class="destination">
+              <label>LocID:</label> <span>{{task.ExecutionData.DestinationLoc.LocId}}</span><br>
+              LocID Monorail: <span>{{task.ExecutionData.DestinationLoc.LocidMonorail}}</span><br>
+              Sequence: <span>{{task.ExecutionData.DestinationLoc.MonorailSequence}}</span><br>
+              <label>PlcID:</label> <span>{{task.ExecutionData.DestinationLoc.Plcid}}</span><br>
+            </div><br>
+            <div >
+              <ul class="tasks">
+                <li v-for="(failed, index) in task.ExecutionData.FailedDropLocations" :key="index">
+                  <label>{{failed.LocId}}</label>
+                </li>
+              </ul>
+            </div>
+          </div>
           <button @click="updateTask">Update</button>
           <button @click="cancelTask">Cancel</button>
           <button @click="clearFailed">Clear Failed Drops</button>
       </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>

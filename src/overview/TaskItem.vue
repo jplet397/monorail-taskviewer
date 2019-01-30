@@ -63,20 +63,25 @@
           </div><br>
           <div class="object-data">
             <label>Pallet Type:</label> <span>{{task.ObjectData.PalletType}}</span><br>
+            <label>PalletRounds :</label> <span>{{task.ObjectData.ExecutionData.RoundCounter.DecisionPointHbw}}</span><br>
+            <label>PalletRounds :</label> <span>{{task.ObjectData.ExecutionData.RoundCounter.DecisionPointBuffer}}</span><br>
           </div><br>
             <div class="location">
+              <h4>Location</h4>
               <label>LocID:</label> <span>{{task.ExecutionData.CurrentLocation.LocId}}</span><br>
               LocID Monorail:<span>{{task.ExecutionData.CurrentLocation.LocidMonorail}}</span><br>
               Sequence: <span>{{task.ExecutionData.CurrentLocation.MonorailSequence}}</span><br>
               <label>PlcID:</label> <span>{{task.ExecutionData.CurrentLocation.Plcid}}</span><br>
             </div><br>
             <div class="source">
+              <h4>Source</h4>
               <label>LocID:</label> <span>{{task.ExecutionData.SourceLoc.LocId}}</span><br>
               LocID Monorail: <span>{{task.ExecutionData.SourceLoc.LocidMonorail}}</span><br>
              Sequence: <span>{{task.ExecutionData.SourceLoc.MonorailSequence}}</span><br>
               <label>PlcID:</label> <span>{{task.ExecutionData.SourceLoc.Plcid}}</span><br>
             </div><br>
             <div class="destination">
+              <h4>Destination</h4>
               <label>LocID:</label> <span>{{task.ExecutionData.DestinationLoc.LocId}}</span><br>
               LocID Monorail: <span>{{task.ExecutionData.DestinationLoc.LocidMonorail}}</span><br>
               Sequence: <span>{{task.ExecutionData.DestinationLoc.MonorailSequence}}</span><br>
@@ -111,14 +116,14 @@
         function pad(s) { return (s < 10) ? `0${s}` : s; }
         const d = new Date(this.task.TaskCreated);
         const aDate = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
-        const aHour = [pad(d.getHours()), pad(d.getSeconds()), pad(d.getMilliseconds())].join(':');
+        const aHour = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
         return `${aDate} ${aHour}`;
       },
       formatUpdateDate() {
         function pad(s) { return (s < 10) ? `0${s}` : s; }
         const d = new Date(this.task.TaskLastUpdate);
         const aDate = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
-        const aHour = [pad(d.getHours()), pad(d.getSeconds()), pad(d.getMilliseconds())].join(':');
+        const aHour = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
         return `${aDate} ${aHour}`;
       },
     },
@@ -126,8 +131,8 @@
       checkToOld() {
         const today = new Date();
         const created = new Date(this.task.TaskCreated);
-        const diffMs = (today - created); // milliseconds between now & Christmas
-        const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+        const diffMs = (today - created);
+        const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
         return diffMins > 20;
       },
       colorCode() {

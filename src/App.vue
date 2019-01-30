@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <div class="header">
-      <div class="logo">
+      <div class="logo" v-if="false">
         <img class="abb-logo" src="./assets/abb-logo-33px.svg" alt="ABB logo">
       </div>
       <div class="app-name">Monorail Task Viewer</div>
     </div>
     <div class="nav-bar">
       <div id="nav">
-        <router-link style="margin-left: 16px" to="/">Overview</router-link>
+          <router-link style="margin-left: 16px" to="/">Overview</router-link>
         |
-        <router-link to="/insert">Add New</router-link>
+          <router-link to="/insert">Add New</router-link>
         |
-        <router-link to="/matrix">Matrix Test</router-link>
+          <router-link to="/matrix">Matrix Test</router-link>
       </div>
     </div>
     <div id="body">
@@ -83,6 +83,7 @@
 
   #nav a.router-link-exact-active {
     color: #FF000F;
+    /*background-color: #ffffff;*/
   }
 
   #body {

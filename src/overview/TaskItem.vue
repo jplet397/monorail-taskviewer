@@ -63,8 +63,11 @@
           </div><br>
           <div class="object-data">
             <label>Pallet Type:</label> <span>{{task.ObjectData.PalletType}}</span><br>
-            <label>PalletRounds :</label> <span>{{task.ObjectData.ExecutionData.RoundCounter.DecisionPointHbw}}</span><br>
-            <label>PalletRounds :</label> <span>{{task.ObjectData.ExecutionData.RoundCounter.DecisionPointBuffer}}</span><br>
+            PalletRounds Hbw:<span>{{task.ExecutionData.RoundCounter.DecisionPointHbw}}</span><br>
+            PalletRounds Buf:<span>{{task.ExecutionData.RoundCounter.DecisionPointBuffer}}</span>
+            <br>
+            IQR Counter:<span>{{task.ExecutionData.RoundCounter.ReroutesCounter}}</span>
+            <br>
           </div><br>
             <div class="location">
               <h4>Location</h4>
@@ -96,8 +99,9 @@
             </div>
           <button @click="updateTask">Update</button>
           <button @click="cancelTask">Cancel</button>
-          <button @click="clearFailed">Clear Failed Drops</button>
-      </div>
+          <button @click="clearFailed" v-if="showClearFailedButton">Clear Failed Drops</button>
+          <button @click="resetRounds" v-if="showResetButton">Reset Rounds</button>
+        </div>
       </div>
     </div>
 </template>
@@ -126,6 +130,13 @@
         const aHour = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
         return `${aDate} ${aHour}`;
       },
+      showResetButton() {
+        return this.task.ExecutionStatus === 'ToManyReroutes';
+      },
+      showClearFailedButton() {
+        return !(this.task.ExecutionData.FailedDropLocations === undefined
+          || this.task.ExecutionData.FailedDropLocations.length === 0);
+      },
     },
     methods: {
       checkToOld() {
@@ -136,7 +147,7 @@
         return diffMins > 20;
       },
       colorCode() {
-        if (this.task.TaskError !== '' && this.task.TaskError !== 0 && this.task.TaskError !== null) this.badgeColor = '#FF000F';
+        if (this.task.TaskStatus === 'InError') this.badgeColor = '#FF000F';
         else if (this.checkToOld()) this.badgeColor = '#ff7c10';
         else if (this.task.ExecutionData.TrolleyId === 0) this.badgeColor = '#4a54ff';
         else this.badgeColor = '#34ff47';
@@ -159,6 +170,16 @@
               this.$toasted.show(`Failed drops for task ${this.task.TaskId} cleared`);
             } else {
               this.$toasted.show(`Failed to clear failed drops for task ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
+      },
+      resetRounds() {
+        this.$store.dispatch('resetRounds', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Rounds counter for ${this.task.TaskId} cleared and reactivated`);
+            } else {
+              this.$toasted.show(`Failed to reset counters ${this.task.TaskId}, Msg: ${result}`);
             }
           });
       },

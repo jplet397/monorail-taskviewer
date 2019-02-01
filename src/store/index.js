@@ -164,5 +164,24 @@ export default new Vuex.Store({
           return 'Something went wrong';
         });
     },
+    resetRounds(config, taskId) {
+      const urlBase = `${constants.DEFAULT_URL}.ResetRounds(`;
+      const urlEnd = ');';
+      const url = urlBase.concat(taskId, urlEnd);
+
+      console.log(url);
+      return axios.get(url)
+        .then((result) => {
+          console.log(result);
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
+    },
   },
 });

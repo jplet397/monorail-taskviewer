@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import TaskOverview from './overview/TaskOverview.vue';
 import UpdateTask from './insert/UpdateTask.vue';
 import MatrixOverview from './matrix/MatrixOverview.vue';
+import RouteTask from "./insert/RouteTask";
 
 Vue.use(Router);
 
@@ -26,6 +27,12 @@ export default new Router({
       path: '/update/:taskId/',
       name: 'update',
       component: UpdateTask,
+      props: true,
+    },
+    {
+      path: '/route/:taskId/',
+      name: 'route',
+      component: RouteTask,
       props: true,
     },
     {

@@ -183,5 +183,74 @@ export default new Vuex.Store({
           return 'Something went wrong';
         });
     },
+    setToManual(config, taskId) {
+      const urlBase = `${constants.DEFAULT_URL}.SetManualMode(`;
+      const urlEnd = ');';
+      const url = urlBase.concat(taskId, ',', true, urlEnd);
+
+      console.log(url);
+      return axios.get(url)
+        .then((result) => {
+          console.log(result);
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
+    },
+    setToAutomatic(config, taskId) {
+      const urlBase = `${constants.DEFAULT_URL}.SetManualMode(`;
+      const urlEnd = ');';
+      const url = urlBase.concat(taskId, ',', false, urlEnd);
+
+      console.log(url);
+      return axios.get(url)
+        .then((result) => {
+          console.log(result);
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
+    },
+    routeTask(config, parameters) {
+      let urlParameters = '';
+      Object.entries(parameters).forEach((key, index) => {
+        let parameter = key[1];
+        if (parameter === '') {
+          parameter = '\xa0';
+        }
+
+        urlParameters += parameter;
+        if (index !== Object.keys(parameters).length - 1) {
+          urlParameters += ', ';
+        }
+      });
+
+      const urlBase = `${constants.DEFAULT_URL}.RouteTask(`;
+      const urlEnd = ');';
+      const url = urlBase.concat(urlParameters, urlEnd);
+
+      console.log(url);
+      return axios.get(url)
+        .then((result) => {
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
+    },
   },
 });

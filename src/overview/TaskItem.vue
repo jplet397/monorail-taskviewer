@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="title-bar" @click="collapseDetail">
-        <div  class="badge" v-bind:style="{ background: badgeColor }">
+        <div class="badge" v-bind:style="{ background: badgeColor }">
           <div>{{task.ExecutionData.TrolleyId}}</div>
         </div>
         <div class="area-container" v-if="true">
@@ -18,16 +18,16 @@
           </div>
         </div>
         <div class="area-container" v-if="true">
-        <div class="line title">
-          <span>Location:</span>
-          <span>Source:</span>
-          <span>Destination:</span>
-        </div>
-        <div class="line data">
-          <span>{{task.ExecutionData.CurrentLocation.LocId}}</span>
-          <span>{{task.ExecutionData.SourceLoc.LocId}}</span>
-          <span>{{task.ExecutionData.DestinationLoc.LocId}}</span>
-        </div>
+          <div class="line title">
+            <span>Location:</span>
+            <span>Source:</span>
+            <span>Destination:</span>
+          </div>
+          <div class="line data">
+            <span>{{task.ExecutionData.CurrentLocation.LocId}}</span>
+            <span>{{task.ExecutionData.SourceLoc.LocId}}</span>
+            <span>{{task.ExecutionData.DestinationLoc.LocId}}</span>
+          </div>
         </div>
         <div class="area-container" v-if="true">
           <div class="line title">
@@ -56,15 +56,18 @@
         <!--<span class="standard badge">{{index + 1}}</span>-->
       </div>
       <div v-if="open">
-
-        </div>
+        <task-detail :task="task"></task-detail>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
+  import TaskDetail from './TaskDetail.vue';
+
   export default {
     name: 'TaskItem',
+    components: {TaskDetail},
     created() {
       this.colorCode();
     },
@@ -73,14 +76,20 @@
     },
     computed: {
       formatCreateDate() {
-        function pad(s) { return (s < 10) ? `0${s}` : s; }
+        function pad(s) {
+          return (s < 10) ? `0${s}` : s;
+        }
+
         const d = new Date(this.task.TaskCreated);
         const aDate = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
         const aHour = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
         return `${aDate} ${aHour}`;
       },
       formatUpdateDate() {
-        function pad(s) { return (s < 10) ? `0${s}` : s; }
+        function pad(s) {
+          return (s < 10) ? `0${s}` : s;
+        }
+
         const d = new Date(this.task.TaskLastUpdate);
         const aDate = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
         const aHour = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
@@ -107,68 +116,6 @@
         else if (this.checkToOld()) this.badgeColor = '#ff7c10';
         else if (this.task.ExecutionData.TrolleyId === 0) this.badgeColor = '#4a54ff';
         else this.badgeColor = '#34ff47';
-      },
-      cancelTask() {
-        this.$store.dispatch('cancelTask', this.task.TaskId)
-          .then((result) => {
-            if (result === true) {
-              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`);
-              this.$store.dispatch('getTasks');
-            } else {
-              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`);
-            }
-          });
-      },
-      clearFailed() {
-        this.$store.dispatch('clearFailed', this.task.TaskId)
-          .then((result) => {
-            if (result === true) {
-              this.$toasted.show(`Failed drops for task ${this.task.TaskId} cleared`);
-              this.$store.dispatch('getTasks');
-            } else {
-              this.$toasted.show(`Failed to clear failed drops for task ${this.task.TaskId}, Msg: ${result}`);
-            }
-          });
-      },
-      resetRounds() {
-        this.$store.dispatch('resetRounds', this.task.TaskId)
-          .then((result) => {
-            if (result === true) {
-              this.$toasted.show(`Rounds counter for ${this.task.TaskId} cleared and reactivated`);
-              this.$store.dispatch('getTasks');
-            } else {
-              this.$toasted.show(`Failed to reset counters ${this.task.TaskId}, Msg: ${result}`);
-            }
-          });
-      },
-      setManualMode() {
-        this.$store.dispatch('setToManual', this.task.TaskId)
-          .then((result) => {
-            if (result === true) {
-              this.$toasted.show(`Manual mode for task ${this.task.TaskId} enabled`);
-              this.$store.dispatch('getTasks');
-            } else {
-              this.$toasted.show(`Failed to enable manual mode ${this.task.TaskId}, Msg: ${result}`);
-            }
-          });
-      },
-      setAutomaticMode() {
-        this.$store.dispatch('setToAutomatic', this.task.TaskId)
-          .then((result) => {
-            if (result === true) {
-              this.$toasted.show(`Manual mode for task ${this.task.TaskId} disabled`);
-              this.$store.dispatch('getTasks');
-            } else {
-              this.$toasted.show(`Failed to disable manual mode ${this.task.TaskId}, Msg: ${result}`);
-            }
-          });
-      },
-
-      updateTask() {
-        this.$router.push(`/update/${this.task.TaskId}`);
-      },
-      routeTask() {
-        this.$router.push(`/route/${this.task.TaskId}`);
       },
       collapseDetail() {
         if (this.index + 1 !== 0) {
@@ -204,11 +151,11 @@
     background-color: #ff7c10;
   }
 
-  .badge-normal{
+  .badge-normal {
     background-color: #34ff47;
   }
 
-  .badge-waiting{
+  .badge-waiting {
     background-color: #4a54ff;
   }
 
@@ -226,9 +173,7 @@
     flex-direction: column;
   }
 
-  .information {
-    background-color: #DCDCDC;
-  }
+
 
   .area-container {
     display: flex;

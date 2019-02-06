@@ -58,11 +58,106 @@
 </template>
 
 <script>
-    export default {
-        name: "TaskDetail"
+  export default {
+    name: 'TaskDetail',
+    props: {
+      task: {
+        type: Object,
+        required: true,
+      },
+    },
+    computed: {
+      showResetButton() {
+        return this.task.ExecutionStatus === 'ToManyReroutes';
+      },
+      showClearFailedButton() {
+        return !(this.task.ExecutionData.FailedDropLocations === undefined
+          || this.task.ExecutionData.FailedDropLocations.length === 0);
+      },
+    },
+    methods: {
+      cancelTask() {
+        this.$store.dispatch('cancelTask', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`);
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
+      },
+      clearFailed() {
+        this.$store.dispatch('clearFailed', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Failed drops for task ${this.task.TaskId} cleared`);
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to clear failed drops for task ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
+      },
+      resetRounds() {
+        this.$store.dispatch('resetRounds', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Rounds counter for ${this.task.TaskId} cleared and reactivated`);
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to reset counters ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
+      },
+      setManualMode() {
+        this.$store.dispatch('setToManual', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Manual mode for task ${this.task.TaskId} enabled`);
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to enable manual mode ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
+      },
+      setAutomaticMode() {
+        this.$store.dispatch('setToAutomatic', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Manual mode for task ${this.task.TaskId} disabled`);
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to disable manual mode ${this.task.TaskId}, Msg: ${result}`);
+            }
+          });
+      },
+
+      updateTask() {
+        this.$router.push(`/update/${this.task.TaskId}`);
+      },
+      routeTask() {
+        this.$router.push(`/route/${this.task.TaskId}`);
+      },
     }
+  }
 </script>
 
 <style scoped>
+  .information {
+    background-color: #DCDCDC;
+  }
 
+  button:hover {
+    background-color: #45a049;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 4px 14px;
+    margin: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 </style>

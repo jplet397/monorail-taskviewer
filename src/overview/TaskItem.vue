@@ -67,7 +67,7 @@
 
   export default {
     name: 'TaskItem',
-    components: {TaskDetail},
+    components: { TaskDetail },
     created() {
       this.colorCode();
     },
@@ -172,8 +172,6 @@
     justify-content: flex-end;
     flex-direction: column;
   }
-
-
 
   .area-container {
     display: flex;

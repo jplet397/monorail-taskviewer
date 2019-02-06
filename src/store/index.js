@@ -24,7 +24,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    getTasks({commit}) {
+    getTasks({ commit }) {
       const url = `${constants.DEFAULT_URL}.GetActiveTasks();`;
       console.log(url);
       axios.get(url)
@@ -51,14 +51,14 @@ export default new Vuex.Store({
         })
         .catch(console.error);
     },
-    getExecutionStates({commit}) {
+    getExecutionStates({ commit }) {
       const url = `${constants.DEFAULT_URL}.GetExecutionStates();`;
       console.log(url);
       axios.get(url)
         .then(result => commit('updateExecutionStates', result.data.Result))
         .catch(console.error);
     },
-    getTaskStates({commit}) {
+    getTaskStates({ commit }) {
       const url = `${constants.DEFAULT_URL}.GetTaskStates();`;
       console.log(url);
       axios.get(url)

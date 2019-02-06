@@ -47,7 +47,9 @@
     <div>
       <button @click="setManualMode" v-if="!task.ExecutionData.ManualMode">To Manual Mode</button>
       <button @click="routeTask" v-if="task.ExecutionData.ManualMode">New destination</button>
-      <button @click="setAutomaticMode" v-if="task.ExecutionData.ManualMode">To Automatic Mode</button>
+      <button @click="setAutomaticMode" v-if="task.ExecutionData.ManualMode">
+        To Automatic Mode
+      </button>
     </div>
     <br>
     <div>
@@ -138,8 +140,8 @@
       routeTask() {
         this.$router.push(`/route/${this.task.TaskId}`);
       },
-    }
-  }
+    },
+  };
 </script>
 
 <style scoped>

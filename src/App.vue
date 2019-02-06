@@ -11,8 +11,6 @@
           <router-link style="margin-left: 16px" to="/">Overview</router-link>
         |
           <router-link to="/insert">Add New</router-link>
-        |
-          <router-link to="/matrix">Matrix Test</router-link>
       </div>
     </div>
     <div id="body">

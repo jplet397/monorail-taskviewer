@@ -13,7 +13,7 @@
       </div>
       <br>
        <div class="form">
-         <form v-if="basicMode" id="form" @submit.prevent="pushTask">
+         <form v-if="!basicMode" id="form" @submit.prevent="pushTask">
              <label>Pallet ID:
                <span class="required">*</span>
                <input type="text" name="palletId" v-model="payload.pallet">
@@ -66,6 +66,26 @@
            <input type="submit" value="Submit">
            <a class="cancel-button" @click="cancel">Cancel</a>
          </form>
+         <form v-if="basicMode" @submit.prevent="pushBasicTask">
+           <label>Pallet ID:
+             <span class="required">*</span>
+             <input type="text" name="palletId" v-model="payload.pallet">
+           </label>
+           <br>
+           <label>Source:
+             <span class="required">*</span>
+             <input type="text" name="source" v-model="payload.source">
+           </label>
+           <br>
+           <label>Destination:
+             <span class="required">*</span>
+             <input type="text" name="destination" v-model="payload.destination">
+           </label>
+           <br>
+           <br>
+           <input type="submit" value="Submit">
+           <a class="cancel-button" @click="cancel">Cancel</a>
+         </form>
        </div>
     </div>
   </div>
@@ -115,6 +135,22 @@
         this.$router.push('/');
       },
       pushTask() {
+        this.$store.dispatch('pushTask', this.payload)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Task for pallet ${this.payload.pallet} created successfully`);
+              this.$router.push('/');
+            } else {
+              this.$toasted.show(`Failed to create new task for pallet ${this.payload.pallet}, Msg: ${result}`);
+            }
+          });
+      },
+      pushBasicTask() {
+        this.payload.executionStatus = 'ToRequestTrolley';
+        this.payload.taskStatus = 'Ready';
+        this.payload.trolley = 0;
+        this.payload.location = this.payload.source;
+
         this.$store.dispatch('pushTask', this.payload)
           .then((result) => {
             if (result === true) {

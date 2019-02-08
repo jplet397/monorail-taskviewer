@@ -138,10 +138,10 @@
         this.$store.dispatch('pushTask', this.payload)
           .then((result) => {
             if (result === true) {
-              this.$toasted.show(`Task for pallet ${this.payload.pallet} created successfully`);
+              this.$toasted.show(`Task for pallet ${this.payload.pallet} created successfully`, { duration: 5000 });
               this.$router.push('/');
             } else {
-              this.$toasted.show(`Failed to create new task for pallet ${this.payload.pallet}, Msg: ${result}`);
+              this.$toasted.show(`Failed to create new task for pallet ${this.payload.pallet}, Msg: ${result}`, { duration: 5000 });
             }
           });
       },
@@ -154,10 +154,10 @@
         this.$store.dispatch('pushTask', this.payload)
           .then((result) => {
             if (result === true) {
-              this.$toasted.show(`Task for pallet ${this.payload.pallet} created successfully`);
+              this.$toasted.show(`Task for pallet ${this.payload.pallet} created successfully`, { duration: 5000 });
               this.$router.push('/');
             } else {
-              this.$toasted.show(`Failed to create new task for pallet ${this.payload.pallet}, Msg: ${result}`);
+              this.$toasted.show(`Failed to create new task for pallet ${this.payload.pallet}, Msg: ${result}`, { duration: 5000 });
             }
           });
       },

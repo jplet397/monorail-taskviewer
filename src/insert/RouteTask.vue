@@ -51,10 +51,10 @@
         this.$store.dispatch('routeTask', this.payload)
           .then((result) => {
             if (result === true) {
-              this.$toasted.show(`Task ${this.payload.task} routed successfully`);
+              this.$toasted.show(`Task ${this.payload.task} routed successfully`, { duration: 5000 });
               this.$router.push('/');
             } else {
-              this.$toasted.show(`Failed to route Task ${this.payload.task}, Msg: ${result}`);
+              this.$toasted.show(`Failed to route Task ${this.payload.task}, Msg: ${result}`, { duration: 5000 });
             }
           });
       },

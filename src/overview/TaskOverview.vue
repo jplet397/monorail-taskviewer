@@ -24,7 +24,7 @@
       this.$store.dispatch('getTasks')
         .catch((err) => {
           console.log(err);
-          this.$toasted.show('Failed to get Tasks');
+          this.$toasted.show('Failed to get Tasks', { duration: 5000 });
         });
     },
     beforeDestroy() {

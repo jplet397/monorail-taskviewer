@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="container">
-      <div class="title-bar" @click="collapseDetail">
+      <div class="title-bar" @click="collapseDetail"  v-bind:style="{ background: backgroundColor }">
         <div class="badge" v-bind:style="{ background: badgeColor }">
           <div>{{task.ExecutionData.TrolleyId}}</div>
         </div>
-        <div class="area-container" v-if="true">
+        <div class="area-container first" v-if="true">
           <div class="line title">
             <span>Task Id:</span>
             <span>Pallet Id:</span>
@@ -17,7 +17,7 @@
             <span>{{task.ObjectData.PalletLabel}}</span>
           </div>
         </div>
-        <div class="area-container" v-if="true">
+        <div class="area-container second" v-if="true">
           <div class="line title">
             <span>Location:</span>
             <span>Source:</span>
@@ -29,7 +29,7 @@
             <span>{{task.ExecutionData.DestinationLoc.LocId}}</span>
           </div>
         </div>
-        <div class="area-container" v-if="true">
+        <div class="area-container third" v-if="true">
           <div class="line title">
             <span>Task status:</span>
             <span>Exec status:</span>
@@ -41,7 +41,7 @@
             <span>{{task.TaskError}}</span>
           </div>
         </div>
-        <div class="area-container" v-if="true">
+        <div class="area-container fourth" v-if="true">
           <div class="line title">
             <span>Created:</span>
             <span>Updated:</span>
@@ -53,7 +53,23 @@
             <span>{{task.TaskErrorDesc}}</span>
           </div>
         </div>
-        <!--<span class="standard badge">{{index + 1}}</span>-->
+        <div class="side-buttons end">
+          <button @click.stop="cancelTask">Cancel</button>
+          <div class="manual-button-container">
+            <button
+              class="manual-button"
+              @click.stop="setManualMode"
+              v-if="!task.ExecutionData.ManualMode">
+              MAN
+            </button>
+            <button
+              class="manual-button"
+              @click.stop="setAutomaticMode"
+              v-if="task.ExecutionData.ManualMode">
+              AUT
+            </button>
+          </div>
+        </div>
       </div>
       <div v-if="open">
         <task-detail :task="task"></task-detail>
@@ -104,6 +120,39 @@
       },
     },
     methods: {
+      cancelTask() {
+        this.$store.dispatch('cancelTask', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`, { duration: 5000 });
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`, { duration: 5000 });
+            }
+          });
+      },
+      setManualMode() {
+        this.$store.dispatch('setToManual', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Manual mode for task ${this.task.TaskId} enabled`, { duration: 5000 });
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to enable manual mode ${this.task.TaskId}, Msg: ${result}`, { duration: 5000 });
+            }
+          });
+      },
+      setAutomaticMode() {
+        this.$store.dispatch('setToAutomatic', this.task.TaskId)
+          .then((result) => {
+            if (result === true) {
+              this.$toasted.show(`Manual mode for task ${this.task.TaskId} disabled`), { duration: 5000 };
+              this.$store.dispatch('getTasks');
+            } else {
+              this.$toasted.show(`Failed to disable manual mode ${this.task.TaskId}, Msg: ${result}`, { duration: 5000 });
+            }
+          });
+      },
       checkToOld() {
         const today = new Date();
         const created = new Date(this.task.TaskCreated);
@@ -116,6 +165,9 @@
         else if (this.checkToOld()) this.badgeColor = '#ff7c10';
         else if (this.task.ExecutionData.TrolleyId === 0) this.badgeColor = '#4a54ff';
         else this.badgeColor = '#34ff47';
+
+        if (this.task.ExecutionData.ManualMode) this.backgroundColor = '#FFE739';
+        else this.backgroundColor = '#DCDCDC';
       },
       collapseDetail() {
         if (this.index + 1 !== 0) {
@@ -137,28 +189,13 @@
       return {
         open: false,
         badgeColor: 'white',
+        backgroundColor: 'White',
       };
     },
   };
 </script>
 
 <style scoped>
-  .badge-error {
-    background-color: #FF000F;;
-  }
-
-  .badge-warning {
-    background-color: #ff7c10;
-  }
-
-  .badge-normal {
-    background-color: #34ff47;
-  }
-
-  .badge-waiting {
-    background-color: #4a54ff;
-  }
-
   .badge {
     text-align: center;
     width: 4%;
@@ -234,10 +271,38 @@
   button {
     background-color: #4CAF50;
     color: white;
-    padding: 4px 14px;
-    margin: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    height: 50%;
+    width: 3em;
+  }
+
+  .manual-button {
+    height: 100%;
+  }
+
+  .manual-button-container {
+    height: 50%;
+  }
+
+  .side-buttons {
+    width: 3em;
+    align-items: flex-end;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+
+  .first {
+    width: 232px;
+  }
+
+  .second {
+    width: 200px;
+  }
+
+  .fourth {
+    flex-grow: 1;
   }
 </style>

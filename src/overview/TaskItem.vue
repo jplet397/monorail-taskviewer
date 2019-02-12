@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="container">
-      <div class="title-bar" @click="collapseDetail"  v-bind:style="{ background: backgroundColor }">
+      <div class="title-bar"
+           @click="collapseDetail"
+           v-bind:style="{ background: backgroundColor }">
         <div class="badge" v-bind:style="{ background: badgeColor }">
           <div>{{task.ExecutionData.TrolleyId}}</div>
         </div>
@@ -54,19 +56,21 @@
           </div>
         </div>
         <div class="side-buttons end">
-          <button @click.stop="cancelTask">Cancel</button>
+          <button class="cancel" @click.stop="cancelTask">
+            <font-awesome-icon icon="times"/>
+          </button>
           <div class="manual-button-container">
             <button
               class="manual-button"
               @click.stop="setManualMode"
               v-if="!task.ExecutionData.ManualMode">
-              MAN
+              <font-awesome-icon icon="hand-paper"/>
             </button>
             <button
               class="manual-button"
               @click.stop="setAutomaticMode"
               v-if="task.ExecutionData.ManualMode">
-              AUT
+              <font-awesome-icon icon="laptop-code"/>
             </button>
           </div>
         </div>
@@ -83,7 +87,7 @@
 
   export default {
     name: 'TaskItem',
-    components: { TaskDetail },
+    components: {TaskDetail},
     created() {
       this.colorCode();
     },
@@ -124,10 +128,10 @@
         this.$store.dispatch('cancelTask', this.task.TaskId)
           .then((result) => {
             if (result === true) {
-              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`, { duration: 5000 });
+              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`, {duration: 5000});
               this.$store.dispatch('getTasks');
             } else {
-              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`, { duration: 5000 });
+              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`, {duration: 5000});
             }
           });
       },
@@ -135,10 +139,10 @@
         this.$store.dispatch('setToManual', this.task.TaskId)
           .then((result) => {
             if (result === true) {
-              this.$toasted.show(`Manual mode for task ${this.task.TaskId} enabled`, { duration: 5000 });
+              this.$toasted.show(`Manual mode for task ${this.task.TaskId} enabled`, {duration: 5000});
               this.$store.dispatch('getTasks');
             } else {
-              this.$toasted.show(`Failed to enable manual mode ${this.task.TaskId}, Msg: ${result}`, { duration: 5000 });
+              this.$toasted.show(`Failed to enable manual mode ${this.task.TaskId}, Msg: ${result}`, {duration: 5000});
             }
           });
       },
@@ -146,10 +150,10 @@
         this.$store.dispatch('setToAutomatic', this.task.TaskId)
           .then((result) => {
             if (result === true) {
-              this.$toasted.show(`Manual mode for task ${this.task.TaskId} disabled`), { duration: 5000 };
+              this.$toasted.show(`Manual mode for task ${this.task.TaskId} disabled`, {duration: 5000});
               this.$store.dispatch('getTasks');
             } else {
-              this.$toasted.show(`Failed to disable manual mode ${this.task.TaskId}, Msg: ${result}`, { duration: 5000 });
+              this.$toasted.show(`Failed to disable manual mode ${this.task.TaskId}, Msg: ${result}`, {duration: 5000});
             }
           });
       },
@@ -262,6 +266,15 @@
     width: 98%;
     margin: .5em;
     border-radius: 4px;
+  }
+
+  .cancel:hover {
+    background-color: #e6000f;
+  }
+
+  .cancel {
+    background-color: #FF000F;
+    color: white;
   }
 
   button:hover {

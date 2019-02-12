@@ -252,5 +252,24 @@ export default new Vuex.Store({
           return 'Something went wrong';
         });
     },
+    matrixCommand(config, parameters) {
+      const urlBase = `${constants.HANDLER_URL}.StartNewSimulationCmd(`;
+      const urlParameters = `${parameters.type}, ${parameters.count}, ${parameters.active}`;
+      const urlEnd = ');';
+      const url = urlBase.concat(urlParameters, urlEnd);
+
+      console.log(url);
+      return axios.get(url)
+        .then((result) => {
+          if (result.data.MethodeSucceed === true) {
+            return true;
+          }
+          return result.data.ResultException.InnerException.Message;
+        })
+        .catch(() => {
+          console.error();
+          return 'Something went wrong';
+        });
+    },
   },
 });

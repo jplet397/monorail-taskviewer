@@ -7,7 +7,7 @@
         <div class="badge" v-bind:style="{ background: badgeColor }">
           <div>{{task.ExecutionData.TrolleyId}}</div>
         </div>
-        <div class="area-container first" v-if="true">
+        <div class="area-container first">
           <div class="line title">
             <span>Task Id:</span>
             <span>Pallet Id:</span>
@@ -19,7 +19,7 @@
             <span>{{task.ObjectData.PalletLabel}}</span>
           </div>
         </div>
-        <div class="area-container second" v-if="true">
+        <div class="area-container second">
           <div class="line title">
             <span>Location:</span>
             <span>Source:</span>
@@ -31,7 +31,7 @@
             <span>{{task.ExecutionData.DestinationLoc.LocId}}</span>
           </div>
         </div>
-        <div class="area-container third" v-if="true">
+        <div class="area-container third">
           <div class="line title">
             <span>Task status:</span>
             <span>Exec status:</span>
@@ -125,15 +125,18 @@
     },
     methods: {
       cancelTask() {
-        this.$store.dispatch('cancelTask', this.task.TaskId)
-          .then((result) => {
-            if (result === true) {
-              this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`, {duration: 5000});
-              this.$store.dispatch('getTasks');
-            } else {
-              this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`, {duration: 5000});
-            }
-          });
+        const r = confirm(`Are you sure you want to remove task ${this.task.TaskId}?`);
+        if (r === true) {
+          this.$store.dispatch('cancelTask', this.task.TaskId)
+            .then((result) => {
+              if (result === true) {
+                this.$toasted.show(`Canceled task ${this.task.TaskId} successfully`, {duration: 5000});
+                this.$store.dispatch('getTasks');
+              } else {
+                this.$toasted.show(`Failed to cancel task ${this.task.TaskId}, Msg: ${result}`, {duration: 5000});
+              }
+            });
+        }
       },
       setManualMode() {
         this.$store.dispatch('setToManual', this.task.TaskId)
@@ -160,8 +163,10 @@
       checkToOld() {
         const today = new Date();
         const created = new Date(this.task.TaskCreated);
-        const diffMs = (today - created);
-        const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+        var timeDiff = Math.abs(today.getTime() - created.getTime());
+        var diffMins = Math.ceil(timeDiff / (1000 * 60));
+        // const diffMs = (today - created);
+        // const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
         return diffMins > 20;
       },
       colorCode() {
@@ -241,6 +246,12 @@
     color: #6E6E6E;
   }
 
+  .data2 {
+    margin-left: 8px;
+    font-weight: bold;
+    color: #6E6E6E;
+  }
+
   .title-bar {
     display: flex;
     flex-wrap: nowrap;
@@ -283,16 +294,17 @@
 
   button {
     background-color: #4CAF50;
+    margin: 1px;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    height: 50%;
-    width: 3em;
+    height: 38px;
+    width: 38px;
   }
 
   .manual-button {
-    height: 100%;
+    height:38px;
   }
 
   .manual-button-container {
@@ -308,7 +320,7 @@
   }
 
   .first {
-    width: 232px;
+    width: 256px;
   }
 
   .second {

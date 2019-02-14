@@ -111,6 +111,24 @@
           </li>
         </ul>
       </div>
+      <div class="box">
+        <h4>Error Records</h4>
+        <div
+          class="title2"
+          v-if="task.ExecutionData.ErrorRecords === undefined
+          || task.ExecutionData.ErrorRecords.length === 0">
+          None
+        </div>
+        <ul class="tasks">
+          <li v-for="(record, index) in task.ExecutionData.ErrorRecords" :key="index">
+            <div class="record">
+              <span class="data2">{{formatDate(record.Created)}}</span>
+              <span class="data2"> | {{record.ErrorCode}}</span>
+              <span class="data2"> | {{record.Description}}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="button-container">
       <button @click="clearFailed" v-if="showClearFailedButton">Clear Failed Drops</button>
@@ -143,6 +161,16 @@
       },
     },
     methods: {
+      formatDate(date) {
+        function pad(s) {
+          return (s < 10) ? `0${s}` : s;
+        }
+
+        const d = new Date(date);
+        const aDate = [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
+        const aHour = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
+        return `${aDate} ${aHour}`;
+      },
       clearFailed() {
         this.$store.dispatch('clearFailed', this.task.TaskId)
           .then((result) => {
@@ -216,10 +244,8 @@
     flex-wrap: wrap;
   }
 
-  .locations-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .record {
+    float: left;
   }
 
   .box {

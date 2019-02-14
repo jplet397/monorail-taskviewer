@@ -5,11 +5,11 @@
       <button class="active" v-if="isPolling" @click="endPolling">Stop auto mode</button>
     </div>
     <h2>Active Tasks:</h2>
-    <ul class="tasks">
+    <ol class="tasks">
       <li v-for="(task, index) in activeTasks" :key="index">
         <task-item :task="task" :index="index"/>
       </li>
-    </ul>
+    </ol>
   </div>
 </template>
 
